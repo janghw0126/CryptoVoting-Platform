@@ -1,45 +1,107 @@
-.container {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  margin-top: 50px;
+/* 전체 레이아웃 스타일 */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f4f4f9;
+  color: #333;
 }
 
-.fetch-btn, .submit-btn {
+.container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+h1 {
+  text-align: center;
+  color: #4caf50;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* 버튼 스타일 */
+button {
+  display: block;
+  width: 100%;
   padding: 10px 20px;
-  font-size: 16px;
-  margin: 10px;
-  cursor: pointer;
-  background-color: #4CAF50;
-  color: white;
+  margin: 10px 0;
+  background: #4caf50;
+  color: #ffffff;
   border: none;
   border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.fetch-btn:hover, .submit-btn:hover {
-  background-color: #45a049;
+button:hover {
+  background: #45a049;
 }
 
-.vote-input {
-  width: 80%;
-  height: 100px;
+button:active {
+  background: #3d8f41;
+}
+
+/* 드롭다운 스타일 */
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+select {
+  width: 100%;
   padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
   font-size: 16px;
   margin-bottom: 20px;
-  border: 1px solid #ccc;
+  background: #f9f9f9;
+  cursor: pointer;
+}
+
+select:focus {
+  border-color: #4caf50;
+  outline: none;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* 결과 표시 스타일 */
+p {
+  margin: 10px 0;
+  font-size: 14px;
+  word-break: break-word;
+}
+
+strong {
+  font-weight: bold;
+  color: #4caf50;
+}
+
+/* 응답 섹션 스타일 */
+div p {
+  padding: 10px;
+  background: #f4f4f9;
+  border: 1px solid #ddd;
   border-radius: 5px;
 }
 
-.result {
-  margin-top: 20px;
-  text-align: left;
-}
+/* 반응형 디자인 */
+@media screen and (max-width: 768px) {
+  .container {
+    margin: 20px;
+    padding: 15px;
+  }
 
-.result ul {
-  list-style-type: none;
-  padding: 0;
-}
+  button {
+    font-size: 14px;
+  }
 
-.result li {
-  font-size: 18px;
-  margin: 5px 0;
+  h1 {
+    font-size: 20px;
+  }
 }
