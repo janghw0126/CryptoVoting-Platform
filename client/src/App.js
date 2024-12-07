@@ -73,6 +73,8 @@ const App = () => {
       // 기존 서버로 전송 (Optional)
       const response = await axios.post('https://127.0.0.1:5000/submit_vote', {
         encrypted_vote: encryptedVoteBase64,
+      },{
+        timeout: 5000 // 5초로 타임아웃 설정
       });
   
       // 서버 응답 확인
