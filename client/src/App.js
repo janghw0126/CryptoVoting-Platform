@@ -9,11 +9,12 @@ const App = () => {
   const [submittedVote, setSubmittedVote] = useState('');
 
   const candidates = ['Candidate 1', 'Candidate 2', 'Candidate 3'];
+  const [encryptedVoteBase64, setEncryptedVoteBase64] = useState('');
 
   // 서버에서 공개키 가져오기
   const fetchPublicKey = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/get_public_key');
+      const response = await axios.get('https://127.0.0.1:5000/get_public_key');
       setPublicKey(response.data);
       alert('Public key fetched successfully.');
     } catch (error) {
@@ -50,27 +51,30 @@ const App = () => {
       alert('Please select a candidate before submitting.');
       return;
     }
-
+  
     try {
       const key = await importPublicKey(publicKey);
-
+  
       // 투표 데이터 암호화
       const encryptedVote = await crypto.subtle.encrypt(
         { name: 'RSA-OAEP' },
         key,
         new TextEncoder().encode(vote)
       );
-
+  
       // Base64로 변환
       const encryptedVoteBase64 = btoa(
         String.fromCharCode(...new Uint8Array(encryptedVote))
       );
-
-      // 서버로 전송
-      const response = await axios.post('http://localhost:5000/submit_vote', {
+  
+      // 암호화된 투표 데이터를 상태에 저장
+      setEncryptedVoteBase64(encryptedVoteBase64);
+  
+      // 기존 서버로 전송 (Optional)
+      const response = await axios.post('https://127.0.0.1:5000/submit_vote', {
         encrypted_vote: encryptedVoteBase64,
       });
-
+  
       // 서버 응답 확인
       if (response.data.signature) {
         setSignature(response.data.signature);
@@ -82,7 +86,22 @@ const App = () => {
     } catch (error) {
       console.error('Error during vote submission:', error);
     }
-  };
+  };  
+
+  const submitVoteViaPythonProxy = async (encryptedVote) => {
+  try {
+    const response = await axios.post('https://localhost:3001/submit_vote', {
+      encrypted_vote: encryptedVote,
+    });
+    if (response.data) {
+      alert('Vote submitted successfully!');
+    } else {
+      alert('Error submitting vote.');
+    }
+  } catch (error) {
+    console.error('Error submitting vote via Python proxy:', error);
+  }
+};
 
   return (
     <div className="container">
@@ -104,6 +123,19 @@ const App = () => {
         </select>
       </div>
       <button onClick={submitVote}>Submit Vote</button>
+      <div>
+        <button
+          onClick={() => {
+            if (encryptedVoteBase64) {
+              submitVoteViaPythonProxy(encryptedVoteBase64);
+            } else {
+              alert('Please submit a vote first!');
+            }
+          }}
+        >
+          Submit Vote via Proxy
+        </button>
+      </div>
       {signature && (
         <div>
           <p><strong>Server Signature:</strong> <br></br> {signature}</p>
